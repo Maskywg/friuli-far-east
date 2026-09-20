@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>義大利極東之旅 12 日｜弗留利．斯洛維尼亞．克羅埃西亞</title>
+<meta name="theme-color" content="#1f4d5c">
+<meta name="description" content="9/20–10/1，2026 楊馥如領讀，弗留利×斯洛維尼亞×克羅埃西亞邊境行旅">
+<meta property="og:type" content="website">
+<meta property="og:title" content="義大利極東・移動講堂 12 日">
+<meta property="og:description" content="山川與海洋在此不是邊界，是風景。從威尼斯出發，穿越弗留利、斯洛維尼亞、克羅埃西亞的交界，走進一段語言、飲食與歷史層層交疊的邊境行旅。">
+<meta property="og:image" content="https://maskywg.github.io/friuli-far-east/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://maskywg.github.io/friuli-far-east/">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="義大利極東・移動講堂 12 日">
+<meta name="twitter:description" content="9/20–10/1，2026 楊馥如領讀，弗留利×斯洛維尼亞×克羅埃西亞邊境行旅">
+<meta name="twitter:image" content="https://maskywg.github.io/friuli-far-east/og-image.jpg">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
+<style>
+  .day-map { height: 280px; border-radius: 8px; margin-top: 10px; border: 1px solid var(--border); }
+</style>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #faf7f2;
+    --card: #ffffff;
+    --border: #e6ded2;
+    --text: #201a14;
+    --muted: #6b6055;
+    --hint: #a89a8a;
+    --blue: #1f4d5c;
+    --blue-light: #e5eef0;
+    --blue-mid: #b7d2d8;
+    --star-bg: #e5eef0;
+    --star: #1f4d5c;
+    --heritage-bg: #f5ecd8;
+    --heritage: #8a6a2a;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--blue);
+    color: white;
+    padding: 2.5rem 1.5rem 2rem;
+    text-align: center;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.3rem, 4vw, 2rem);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  header p {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    letter-spacing: 0.06em;
+  }
+
+  header .lede {
+    max-width: 560px;
+    margin: 0.9rem auto 0;
+    font-size: 0.8rem;
+    line-height: 1.9;
+    opacity: 0.72;
+    font-weight: 300;
+  }
+
+  .legend {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 1rem 1.5rem;
+    background: white;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+    display: inline-block;
+  }
+  .badge.star { background: var(--star-bg); color: var(--star); }
+  .badge.dot { background: #f0ede8; color: var(--muted); }
+  .badge.heritage { background: var(--heritage-bg); color: var(--heritage); }
+
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .day-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+
+  .day-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 16px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+
+  .day-header:hover { background: #faf8f5; }
+
+  .day-num {
+    background: var(--blue-light);
+    color: var(--blue);
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 8px;
+    white-space: nowrap;
+    min-width: 46px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .day-date {
+    font-size: 12px;
+    color: var(--blue);
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .flag { font-size: 14px; flex-shrink: 0; }
+
+  .day-title-wrap { flex: 1; min-width: 0; }
+
+  .day-zh {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .day-en {
+    font-size: 11px;
+    color: var(--hint);
+    margin-top: 1px;
+  }
+
+  .day-country {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .chevron {
+    font-size: 10px;
+    color: var(--hint);
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+
+  .chevron.open { transform: rotate(90deg); }
+
+  .day-body {
+    display: none;
+    padding: 0 16px 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .day-body.open { display: block; }
+
+  .section { margin-top: 12px; }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--hint);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+
+  .spots { display: flex; flex-direction: column; gap: 8px; }
+
+  .spot-item { display: flex; flex-direction: column; gap: 4px; }
+
+  .spot-tag {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    line-height: 1.5;
+    max-width: fit-content;
+  }
+
+  .spot-tag.star { background: var(--star-bg); color: var(--star); }
+  .spot-tag.heritage { background: var(--heritage-bg); color: var(--heritage); }
+  .spot-tag.dot { background: #f0ede8; color: var(--text); border: 1px solid var(--border); }
+
+  .link-row {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    padding-left: 4px;
+  }
+
+  .link-btn {
+    font-size: 11px;
+    padding: 2px 9px;
+    border-radius: 20px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: white;
+    transition: all 0.15s;
+  }
+
+  .link-btn:hover {
+    background: var(--bg);
+    color: var(--text);
+    border-color: var(--hint);
+  }
+
+  .link-btn.official {
+    background: var(--blue-light);
+    color: var(--blue);
+    border-color: var(--blue-mid);
+  }
+
+  .link-btn.official:hover {
+    background: var(--blue-mid);
+  }
+
+  .meal-row {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+
+  .meal-item { display: flex; gap: 5px; align-items: center; }
+  .meal-label { font-weight: 500; color: var(--hint); font-size: 11px; }
+
+  .hotel {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 10px;
+    padding: 8px 11px;
+    background: #faf8f5;
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--blue-mid);
+    line-height: 1.6;
+  }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 12px;
+    color: var(--hint);
+  }
+
+  /* 特產區塊 */
+  .shopping-section {
+    margin-top: 12px;
+    background: #fffdf7;
+    border: 1px solid #e8dfc8;
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+  }
+
+  .shopping-title {
+    font-size: 11px;
+    font-weight: 500;
+    color: #8a6c2a;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .shopping-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .shopping-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .shopping-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .shopping-desc {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .shopping-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 10px;
+    margin-right: 3px;
+    margin-bottom: 2px;
+  }
+
+  .tag-food { background: #fef3e2; color: #9a5c00; border: 1px solid #f5d9a0; }
+  .tag-brand { background: #e8f0f8; color: #1a4a7a; border: 1px solid #b8d0e8; }
+  .tag-souvenir { background: #f0edf8; color: #5a3a8a; border: 1px solid #cfc0e8; }
+
+  /* 班機時刻表 */
+  .flight-section {
+    margin-top: 12px;
+    border: 1px solid #dde5e6;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .flight-header {
+    background: #1f4d5c;
+    color: white;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 6px 12px;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .flight-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .flight-table th {
+    background: #e5eef0;
+    color: #1f4d5c;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 5px 10px;
+    text-align: left;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid #dde5e6;
+  }
+  .flight-table td {
+    padding: 8px 10px;
+    color: var(--text);
+    border-bottom: 1px solid #f0f4f2;
+    vertical-align: middle;
+  }
+  .flight-table tr:last-child td { border-bottom: none; }
+  .flight-no {
+    font-weight: 500;
+    color: #1f4d5c;
+    font-size: 13px;
+  }
+  .flight-time {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: 0.02em;
+  }
+  .flight-city {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+  .flight-arrow {
+    color: var(--hint);
+    font-size: 14px;
+    padding: 0 4px;
+  }
+  .flight-dur {
+    font-size: 11px;
+    color: var(--muted);
+    background: #f7f5f0;
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+  .flight-label {
+    font-size: 10px;
+    background: #1f4d5c;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>義大利極東・移動講堂 12 日</h1>
+  <p>9/20 – 10/1, 2026 ・ 楊馥如領讀 ・ 弗留利 × 斯洛維尼亞 × 克羅埃西亞</p>
+  <p class="lede">山川與海洋在此不是邊界，是風景。從威尼斯出發，穿越弗留利、斯洛維尼亞、克羅埃西亞的交界，走進一段語言、飲食與歷史層層交疊的邊境行旅。</p>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><span class="badge star">★ 必訪</span> 重點行程（含門票／體驗）</div>
+  <div class="legend-item"><span class="badge dot">◎ 參觀</span> 下車參觀／自由漫步</div>
+  <div class="legend-item"><span class="badge heritage">🏛 UNESCO</span> 世界遺產／候選遺產</div>
+  <div class="legend-item" style="border-left:1px solid #e2ddd6;padding-left:12px;color:#8a6c2a">🛒 特產推薦：展開每天可見</div>
+</div>
+
+<!-- 即時匯率區塊 -->
+<div style="max-width:800px;margin:1.2rem auto 0;padding:0 1rem">
+  <div id="rate-card" style="background:#fff;border:1px solid #e2ddd6;border-radius:12px;overflow:hidden">
+    <div style="background:#1f4d5c;padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
+      <div style="color:white;font-size:14px;font-weight:500">💱 歐元 × 台幣即時匯率</div>
+      <button onclick="fetchRates()" id="refresh-btn"
+        style="background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:20px;font-size:11px;padding:4px 12px;cursor:pointer">
+        ↻ 更新匯率
+      </button>
+    </div>
+    <div id="rate-body" style="padding:12px 16px">
+      <div style="color:#a09890;font-size:12px;text-align:center;padding:8px">載入中...</div>
+    </div>
+    <div id="rate-footer" style="padding:6px 16px 10px;font-size:10px;color:#a09890;border-top:1px solid #f0ede8"></div>
+  </div>
+</div>
+
+<script>
+const QUICK_AMOUNTS = [1, 10, 50, 100, 500, 1000];
+
+async function fetchRates() {
+  const btn = document.getElementById('refresh-btn');
+  const body = document.getElementById('rate-body');
+  const footer = document.getElementById('rate-footer');
+  btn.textContent = '載入中...';
+  btn.disabled = true;
+
+  try {
+    let rate = null;
+
+    try {
+      const r = await fetch('https://api.frankfurter.app/latest?from=TWD&to=EUR');
+      if (r.ok) { const d = await r.json(); rate = d.rates.EUR; }
+    } catch(e) {}
+
+    if (!rate) {
+      try {
+        const r = await fetch('https://latest.currency-api.pages.dev/v1/currencies/twd.json');
+        if (r.ok) { const d = await r.json(); rate = d.twd.eur; }
+      } catch(e) {}
+    }
+
+    if (!rate) {
+      try {
+        const r = await fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/twd.json');
+        if (r.ok) { const d = await r.json(); rate = d.twd.eur; }
+      } catch(e) {}
+    }
+
+    if (!rate) throw new Error('無法取得匯率，請確認網路連線後重試');
+
+    const ratePerForeign = 1 / rate;
+    const ratePerTWD100 = (100 * rate).toFixed(2);
+
+    const quickRows = QUICK_AMOUNTS.map(amt => {
+      const twd = (amt * ratePerForeign).toFixed(1);
+      return `<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #f5f3ef">
+        <span style="color:#6b6560">€${amt}</span>
+        <span style="font-weight:500;color:#1a1814">≈ NT$ ${Number(twd).toLocaleString()}</span>
+      </div>`;
+    }).join('');
+
+    const html = `
+      <div style="max-width:420px;margin:0 auto;border:1px solid #e8e4de;border-radius:8px;overflow:hidden">
+        <div style="background:#2D6FA3;padding:8px 12px;display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:18px">🇪🇺</span>
+            <div>
+              <div style="color:white;font-size:13px;font-weight:500">歐元 (EUR)</div>
+              <div style="color:rgba(255,255,255,0.7);font-size:10px">義大利／斯洛維尼亞／克羅埃西亞全程通用</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div style="color:white;font-size:18px;font-weight:600">NT$ ${ratePerForeign.toFixed(2)}</div>
+            <div style="color:rgba(255,255,255,0.7);font-size:10px">= 1 EUR</div>
+          </div>
+        </div>
+        <div style="padding:8px 12px;background:#fafaf8">
+          <div style="font-size:10px;color:#a09890;margin-bottom:5px;letter-spacing:0.04em">快速換算</div>
+          ${quickRows}
+          <div style="display:flex;justify-content:space-between;padding:4px 0;margin-top:2px">
+            <span style="color:#6b6560;font-size:11px">NT$ 100</span>
+            <span style="font-weight:500;font-size:11px;color:#1f4d5c">≈ € ${ratePerTWD100}</span>
+          </div>
+        </div>
+        <div style="padding:6px 12px 8px">
+          <div style="font-size:10px;color:#a09890;margin-bottom:4px">自訂金額</div>
+          <div style="display:flex;gap:6px;align-items:center">
+            <span style="color:#6b6560;font-size:12px">€</span>
+            <input type="number" placeholder="輸入歐元金額" oninput="calcTWD(this, ${ratePerForeign})"
+              style="flex:1;border:1px solid #ddd;border-radius:6px;padding:5px 8px;font-size:12px;outline:none;min-width:0">
+            <span style="color:#a09890;font-size:12px">=</span>
+            <span class="twd-result-EUR"
+              style="color:#1f4d5c;font-weight:500;font-size:13px;min-width:60px;text-align:right">NT$ —</span>
+          </div>
+        </div>
+      </div>`;
+    body.innerHTML = html;
+
+    const now = new Date();
+    footer.textContent = `匯率更新時間：${now.toLocaleDateString('zh-TW')} ${now.toLocaleTimeString('zh-TW')} ・資料來源：Frankfurter API（歐洲央行）`;
+    btn.textContent = '↻ 更新匯率';
+    btn.disabled = false;
+
+  } catch(e) {
+    body.innerHTML = '<div style="color:#c0392b;font-size:12px;text-align:center;padding:12px">匯率載入失敗，請檢查網路連線後重試。</div>';
+    btn.textContent = '↻ 重試';
+    btn.disabled = false;
+  }
+}
+
+function calcTWD(input, rate) {
+  const val = parseFloat(input.value);
+  const el = document.querySelector('.twd-result-EUR');
+  if (!el) return;
+  if (isNaN(val) || val === '') {
+    el.textContent = 'NT$ —';
+  } else {
+    el.textContent = 'NT$ ' + (val * rate).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+}
+
+fetchRates();
+</script>
+
+<main id="app"></main>
+
+<!-- 廁所攻略區塊 -->
+<div style="max-width:800px;margin:1.5rem auto 0;padding:0 1rem">
+  <div style="background:#fff;border:1px solid #e2ddd6;border-radius:12px;overflow:hidden">
+    <div style="background:#4a3728;padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer" onclick="var b=document.getElementById('tlb');var c=document.getElementById('tlc');if(b.style.display==='none'){b.style.display='block';c.style.transform='rotate(90deg)'}else{b.style.display='none';c.style.transform=''}">
+      <span style="font-size:18px">🚽</span>
+      <div style="flex:1">
+        <div style="color:white;font-size:14px;font-weight:500">邊境廁所生存指南</div>
+        <div style="color:rgba(255,255,255,0.65);font-size:11px">義大利／斯洛維尼亞／克羅埃西亞：收費、免費廁所位置、實用技巧全整理</div>
+      </div>
+      <span id="tlc" style="color:rgba(255,255,255,0.7);font-size:12px;transition:transform 0.25s">▶</span>
+    </div>
+
+    <div id="tlb" style="display:none;padding:16px">
+
+      <div style="background:#fdf8f4;border-left:3px solid #c0784a;border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#4a3728;line-height:1.7">
+        ⚠️ <strong>最重要的觀念：</strong>三國多數公廁需付費，養成「上車前、離開景點前必上廁所」的習慣最省事。鄉間小鎮與國家公園型景點（如文特高峽谷、洞穴堡）廁所較少，把握每個有廁所的據點。
+      </div>
+
+      <div style="font-size:11px;font-weight:500;color:#6b6560;letter-spacing:0.06em;margin-bottom:8px">💰 三國公廁費用比較</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-bottom:16px">
+
+        <div style="border:1px solid #e8e4de;border-radius:8px;overflow:hidden">
+          <div style="background:#009246;padding:7px 10px;display:flex;align-items:center;gap:6px">
+            <span style="font-size:16px">🇮🇹</span><span style="color:white;font-size:12px;font-weight:500">義大利</span>
+          </div>
+          <div style="padding:8px 10px">
+            <div style="font-size:13px;font-weight:500;color:#1a1814">約 €0.5–1</div>
+            <div style="font-size:11px;color:#185FA5;margin-bottom:4px">≈ NT$18–35</div>
+            <div style="font-size:11px;color:#6b6560;line-height:1.5">火車站、高速公路休息站多收費；咖啡館內消費後可免費借用</div>
+          </div>
+        </div>
+
+        <div style="border:1px solid #e8e4de;border-radius:8px;overflow:hidden">
+          <div style="background:#005DA4;padding:7px 10px;display:flex;align-items:center;gap:6px">
+            <span style="font-size:16px">🇸🇮</span><span style="color:white;font-size:12px;font-weight:500">斯洛維尼亞</span>
+          </div>
+          <div style="padding:8px 10px">
+            <div style="font-size:13px;font-weight:500;color:#1a1814">約 €0.5–1</div>
+            <div style="font-size:11px;color:#185FA5;margin-bottom:4px">≈ NT$18–35</div>
+            <div style="font-size:11px;color:#6b6560;line-height:1.5">布萊德湖、盧比亞納市區設有付費公廁，景區入口處最常見</div>
+          </div>
+        </div>
+
+        <div style="border:1px solid #e8e4de;border-radius:8px;overflow:hidden">
+          <div style="background:#171796;padding:7px 10px;display:flex;align-items:center;gap:6px">
+            <span style="font-size:16px">🇭🇷</span><span style="color:white;font-size:12px;font-weight:500">克羅埃西亞</span>
+          </div>
+          <div style="padding:8px 10px">
+            <div style="font-size:13px;font-weight:500;color:#1a1814">約 €0.5–1</div>
+            <div style="font-size:11px;color:#185FA5;margin-bottom:4px">≈ NT$18–35</div>
+            <div style="font-size:11px;color:#6b6560;line-height:1.5">濱海觀光區（波雷奇、羅維尼）舊城入口附近設有收費公廁</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="font-size:11px;font-weight:500;color:#6b6560;letter-spacing:0.06em;margin-bottom:8px">✅ 這些地方有免費廁所</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:6px;margin-bottom:16px">
+
+        <div style="display:flex;gap:8px;padding:7px 10px;background:#f4fbf7;border:1px solid #cce8d8;border-radius:8px">
+          <span style="font-size:16px">🏨</span>
+          <div><div style="font-size:12px;font-weight:500;color:#1a1814">飯店大廳</div><div style="font-size:11px;color:#6b6560">每天出門前必上，不要錯過</div></div>
+        </div>
+
+        <div style="display:flex;gap:8px;padding:7px 10px;background:#f4fbf7;border:1px solid #cce8d8;border-radius:8px">
+          <span style="font-size:16px">🏛</span>
+          <div><div style="font-size:12px;font-weight:500;color:#1a1814">工坊／博物館內</div><div style="font-size:11px;color:#6b6560">火腿、乳酪、蜂蜜工坊見學時利用</div></div>
+        </div>
+
+        <div style="display:flex;gap:8px;padding:7px 10px;background:#f4fbf7;border:1px solid #cce8d8;border-radius:8px">
+          <span style="font-size:16px">🍽</span>
+          <div><div style="font-size:12px;font-weight:500;color:#1a1814">餐廳用餐時</div><div style="font-size:11px;color:#6b6560">吃完飯離開前記得去上</div></div>
+        </div>
+
+        <div style="display:flex;gap:8px;padding:7px 10px;background:#f4fbf7;border:1px solid #cce8d8;border-radius:8px">
+          <span style="font-size:16px">🏰</span>
+          <div><div style="font-size:12px;font-weight:500;color:#1a1814">城堡景區</div><div style="font-size:11px;color:#6b6560">布萊德城堡、洞穴堡遊客中心附設</div></div>
+        </div>
+
+        <div style="display:flex;gap:8px;padding:7px 10px;background:#f4fbf7;border:1px solid #cce8d8;border-radius:8px">
+          <span style="font-size:16px">✈️</span>
+          <div><div style="font-size:12px;font-weight:500;color:#1a1814">機場、機上</div><div style="font-size:11px;color:#6b6560">長途轉機時多利用</div></div>
+        </div>
+
+        <div style="display:flex;gap:8px;padding:7px 10px;background:#f4fbf7;border:1px solid #cce8d8;border-radius:8px">
+          <span style="font-size:16px">📱</span>
+          <div><div style="font-size:12px;font-weight:500;color:#1a1814">App 查詢</div><div style="font-size:11px;color:#6b6560">Flush App 可離線查附近廁所</div></div>
+        </div>
+
+      </div>
+
+      <div style="font-size:11px;font-weight:500;color:#6b6560;letter-spacing:0.06em;margin-bottom:8px">💡 實用生存技巧</div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+
+        <div style="display:flex;align-items:flex-start;gap:8px;padding:7px 10px;border-radius:8px;background:#fafaf8">
+          <span style="color:#c0784a;font-size:13px;font-weight:700">→</span>
+          <div><span style="font-size:12px;font-weight:500;color:#1a1814">隨身帶歐元零錢：</span><span style="font-size:12px;color:#6b6560">三國全程通用歐元，小額硬幣多準備幾枚，許多廁所只收現金</span></div>
+        </div>
+
+        <div style="display:flex;align-items:flex-start;gap:8px;padding:7px 10px;border-radius:8px">
+          <span style="color:#c0784a;font-size:13px;font-weight:700">→</span>
+          <div><span style="font-size:12px;font-weight:500;color:#1a1814">長車程日提前規劃：</span><span style="font-size:12px;color:#6b6560">盧比亞納、洞穴堡兩個移動日車程較長，休息站把握機會</span></div>
+        </div>
+
+        <div style="display:flex;align-items:flex-start;gap:8px;padding:7px 10px;border-radius:8px;background:#fafaf8">
+          <span style="color:#c0784a;font-size:13px;font-weight:700">→</span>
+          <div><span style="font-size:12px;font-weight:500;color:#1a1814">健行前先解決：</span><span style="font-size:12px;color:#6b6560">文特高峽谷輕健行沿途廁所少，入口處先上</span></div>
+        </div>
+
+        <div style="display:flex;align-items:flex-start;gap:8px;padding:7px 10px;border-radius:8px">
+          <span style="color:#c0784a;font-size:13px;font-weight:700">→</span>
+          <div><span style="font-size:12px;font-weight:500;color:#1a1814">備小包衛生紙：</span><span style="font-size:12px;color:#6b6560">不是每個廁所都提供衛生紙，濕紙巾也很實用</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 語言與翻譯大師 -->
+<div style="max-width:800px;margin:1.5rem auto 0;padding:0 1rem">
+  <div style="background:#fff;border:1px solid #e2ddd6;border-radius:12px;overflow:hidden">
+
+    <div style="background:#1a3a4a;padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer"
+      onclick="var b=document.getElementById('lang-body');var c=document.getElementById('lang-chev');if(b.style.display==='none'){b.style.display='block';c.style.transform='rotate(90deg)'}else{b.style.display='none';c.style.transform=''}">
+      <span style="font-size:18px">🗣️</span>
+      <div style="flex:1">
+        <div style="color:white;font-size:14px;font-weight:500">義語・斯洛維尼亞語・克羅埃西亞語翻譯大師</div>
+        <div style="color:rgba(255,255,255,0.65);font-size:11px">三種語言在近距離內交會 · 點擊直接開啟翻譯工具</div>
+      </div>
+      <span id="lang-chev" style="color:rgba(255,255,255,0.7);font-size:12px;transition:transform 0.25s">▶</span>
+    </div>
+
+    <div id="lang-body" style="display:none;padding:16px">
+
+      <div style="background:#e8f4fb;border-left:3px solid #1a3a4a;border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#1a3a4a;line-height:1.7">
+        💡 這趟旅程最迷人之處，就是在很短的車程裡穿越三種語言。觀光區英文普及率都高，不必擔心，但學幾句在地語言，正是邊境旅行最溫柔的敲門磚。
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-bottom:16px">
+
+        <!-- 義語 -->
+        <div style="border:1px solid #e8e4de;border-radius:10px;overflow:hidden">
+          <div style="background:#009246;padding:8px 12px;display:flex;align-items:center;gap:8px">
+            <span style="font-size:20px">🇮🇹</span>
+            <div>
+              <div style="color:white;font-size:13px;font-weight:500">義大利語 Italiano</div>
+              <div style="color:rgba(255,255,255,0.7);font-size:10px">Day 1–4, 8–11 · 弗留利、特里埃斯特</div>
+            </div>
+          </div>
+          <div style="padding:10px 12px">
+            <div style="font-size:11px;color:#6b6560;margin-bottom:8px;line-height:1.6">弗留利大區日常也混用弗留利語（Furlan），但標準義大利語通行無阻。</div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">
+              <span style="font-size:11px;background:#eafaf0;color:#009246;padding:2px 8px;border-radius:10px">Buongiorno = 你好</span>
+              <span style="font-size:11px;background:#eafaf0;color:#009246;padding:2px 8px;border-radius:10px">Grazie = 謝謝</span>
+              <span style="font-size:11px;background:#eafaf0;color:#009246;padding:2px 8px;border-radius:10px">Scusi = 不好意思</span>
+              <span style="font-size:11px;background:#eafaf0;color:#009246;padding:2px 8px;border-radius:10px">Il conto = 帳單</span>
+              <span style="font-size:11px;background:#eafaf0;color:#009246;padding:2px 8px;border-radius:10px">Dov'è il bagno? = 廁所在哪</span>
+            </div>
+            <a href="https://translate.google.com/?sl=it&tl=zh-TW" target="_blank"
+              style="display:flex;align-items:center;gap:6px;background:#009246;color:white;text-decoration:none;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:500;width:fit-content">
+              <span>🌐</span> Google 翻譯（義大利語）
+            </a>
+          </div>
+        </div>
+
+        <!-- 斯洛維尼亞語 -->
+        <div style="border:1px solid #e8e4de;border-radius:10px;overflow:hidden">
+          <div style="background:#005DA4;padding:8px 12px;display:flex;align-items:center;gap:8px">
+            <span style="font-size:20px">🇸🇮</span>
+            <div>
+              <div style="color:white;font-size:13px;font-weight:500">斯洛維尼亞語 Slovenščina</div>
+              <div style="color:rgba(255,255,255,0.7);font-size:10px">Day 5–7, 11 · 盧比亞納、布萊德、皮蘭</div>
+            </div>
+          </div>
+          <div style="padding:10px 12px">
+            <div style="font-size:11px;color:#6b6560;margin-bottom:8px;line-height:1.6">斯拉夫語系，發音對台灣旅人較陌生，但年輕世代英文流利。</div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">
+              <span style="font-size:11px;background:#e8f0f8;color:#005DA4;padding:2px 8px;border-radius:10px">Živjo = 你好</span>
+              <span style="font-size:11px;background:#e8f0f8;color:#005DA4;padding:2px 8px;border-radius:10px">Hvala = 謝謝</span>
+              <span style="font-size:11px;background:#e8f0f8;color:#005DA4;padding:2px 8px;border-radius:10px">Oprostite = 不好意思</span>
+              <span style="font-size:11px;background:#e8f0f8;color:#005DA4;padding:2px 8px;border-radius:10px">Račun = 帳單</span>
+              <span style="font-size:11px;background:#e8f0f8;color:#005DA4;padding:2px 8px;border-radius:10px">Kje je stranišče? = 廁所在哪</span>
+            </div>
+            <a href="https://translate.google.com/?sl=sl&tl=zh-TW" target="_blank"
+              style="display:flex;align-items:center;gap:6px;background:#005DA4;color:white;text-decoration:none;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:500;width:fit-content">
+              <span>🌐</span> Google 翻譯（斯洛維尼亞語）
+            </a>
+          </div>
+        </div>
+
+        <!-- 克羅埃西亞語 -->
+        <div style="border:1px solid #e8e4de;border-radius:10px;overflow:hidden">
+          <div style="background:#171796;padding:8px 12px;display:flex;align-items:center;gap:8px">
+            <span style="font-size:20px">🇭🇷</span>
+            <div>
+              <div style="color:white;font-size:13px;font-weight:500">克羅埃西亞語 Hrvatski</div>
+              <div style="color:rgba(255,255,255,0.7);font-size:10px">Day 10 · 波雷奇、羅維尼</div>
+            </div>
+          </div>
+          <div style="padding:10px 12px">
+            <div style="font-size:11px;color:#6b6560;margin-bottom:8px;line-height:1.6">與斯洛維尼亞語同屬南斯拉夫語族，發音相近，濱海觀光區義大利語也通。</div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">
+              <span style="font-size:11px;background:#eceafc;color:#171796;padding:2px 8px;border-radius:10px">Bok = 你好</span>
+              <span style="font-size:11px;background:#eceafc;color:#171796;padding:2px 8px;border-radius:10px">Hvala = 謝謝</span>
+              <span style="font-size:11px;background:#eceafc;color:#171796;padding:2px 8px;border-radius:10px">Oprostite = 不好意思</span>
+              <span style="font-size:11px;background:#eceafc;color:#171796;padding:2px 8px;border-radius:10px">Račun = 帳單</span>
+              <span style="font-size:11px;background:#eceafc;color:#171796;padding:2px 8px;border-radius:10px">Gdje je WC? = 廁所在哪</span>
+            </div>
+            <a href="https://translate.google.com/?sl=hr&tl=zh-TW" target="_blank"
+              style="display:flex;align-items:center;gap:6px;background:#171796;color:white;text-decoration:none;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:500;width:fit-content">
+              <span>🌐</span> Google 翻譯（克羅埃西亞語）
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="background:#fafaf8;border:1px solid #e8e4de;border-radius:10px;padding:12px 14px">
+        <div style="font-size:11px;font-weight:500;color:#6b6560;letter-spacing:0.05em;margin-bottom:10px">🆘 緊急英文救命句（三國通用）</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px">
+          <div style="font-size:12px;padding:5px 0;border-bottom:1px solid #f0ede8"><span style="color:#1f4d5c;font-weight:500">Where is the toilet?</span><span style="color:#6b6560"> 廁所在哪？</span></div>
+          <div style="font-size:12px;padding:5px 0;border-bottom:1px solid #f0ede8"><span style="color:#1f4d5c;font-weight:500">The bill, please.</span><span style="color:#6b6560"> 請給我帳單</span></div>
+          <div style="font-size:12px;padding:5px 0;border-bottom:1px solid #f0ede8"><span style="color:#1f4d5c;font-weight:500">Do you speak English?</span><span style="color:#6b6560"> 你說英文嗎？</span></div>
+          <div style="font-size:12px;padding:5px 0;border-bottom:1px solid #f0ede8"><span style="color:#1f4d5c;font-weight:500">How much is this?</span><span style="color:#6b6560"> 這個多少錢？</span></div>
+          <div style="font-size:12px;padding:5px 0;border-bottom:1px solid #f0ede8"><span style="color:#1f4d5c;font-weight:500">I'm allergic to ___.</span><span style="color:#6b6560"> 我對___過敏</span></div>
+          <div style="font-size:12px;padding:5px 0;border-bottom:1px solid #f0ede8"><span style="color:#1f4d5c;font-weight:500">Can I pay by card?</span><span style="color:#6b6560"> 可以刷卡嗎？</span></div>
+          <div style="font-size:12px;padding:5px 0;border-bottom:1px solid #f0ede8"><span style="color:#1f4d5c;font-weight:500">I need a doctor.</span><span style="color:#6b6560"> 我需要看醫生</span></div>
+          <div style="font-size:12px;padding:5px 0"><span style="color:#1f4d5c;font-weight:500">Please call the police.</span><span style="color:#6b6560"> 請幫我叫警察</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- 咖啡朝聖清單 -->
+<div style="max-width:800px;margin:1.5rem auto 0;padding:0 1rem">
+  <div style="background:#fff;border:1px solid #e2ddd6;border-radius:12px;overflow:hidden">
+
+    <div style="background:#2c1810;padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer"
+      onclick="var b=document.getElementById('clf');var c=document.getElementById('clc');if(b.style.display==='none'){b.style.display='block';c.style.transform='rotate(90deg)'}else{b.style.display='none';c.style.transform=''}">
+      <span style="font-size:18px">☕</span>
+      <div style="flex:1">
+        <div style="color:white;font-size:14px;font-weight:500">特里埃斯特咖啡朝聖清單</div>
+        <div style="color:rgba(255,255,255,0.65);font-size:11px">義大利咖啡文化的隱藏首都 · 喝完記錄心得！</div>
+      </div>
+      <span id="clc" style="color:rgba(255,255,255,0.7);font-size:12px;transition:transform 0.25s">▶</span>
+    </div>
+
+    <div id="clf" style="display:none;padding:16px">
+
+      <div style="background:#fdf6f0;border-left:3px solid #6b4423;border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#2c1810;line-height:1.7">
+        💡 特里埃斯特是義大利咖啡烘焙重鎮（Illy 的故鄉），奧匈帝國時代留下大量文學咖啡館。Day 9 文化名城走讀的空檔，正好安排一杯，喝完記得評分！
+      </div>
+
+      <div style="font-size:12px;font-weight:500;color:#6b4423;letter-spacing:0.05em;margin-bottom:8px">☕ 特里埃斯特（Day 9）</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+
+        <div style="border:2px solid #c0784a;border-radius:10px;overflow:hidden" id="cafe-sanmarco">
+          <div style="padding:10px 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+                <span style="font-size:13px;font-weight:500;color:#1a1814">Caffè San Marco</span>
+                <span style="font-size:10px;background:#fff0e8;color:#c0784a;padding:1px 6px;border-radius:10px">⭐ 強烈推薦</span>
+                <span style="font-size:10px;background:#fef3e2;color:#9a5c00;padding:1px 6px;border-radius:10px">1914 年創立</span>
+              </div>
+              <div style="font-size:11px;color:#6b6560;line-height:1.6">文學咖啡館代表，喬伊斯與薩巴曾在此寫作。維也納式裝潢與書店結合，適合久坐。</div>
+              <div style="margin-top:5px;display:flex;gap:6px">
+                <a href="https://maps.google.com/?q=Caffe+San+Marco+Trieste" target="_blank" style="font-size:10px;color:#6b6560;text-decoration:none;background:#f0ede8;padding:2px 8px;border-radius:10px">地圖 ↗</a>
+              </div>
+            </div>
+            <button onclick="toggleCafeReview('sanmarco')" style="font-size:11px;padding:5px 10px;border-radius:20px;border:1px solid #c0784a;background:#fff0e8;cursor:pointer;white-space:nowrap;color:#c0784a">✍️ 記錄心得</button>
+          </div>
+          <div id="review-sanmarco" style="display:none;padding:10px 12px;border-top:1px solid #f0ddd0;background:#fafaf8">
+            <div style="display:flex;gap:4px;margin-bottom:6px" id="stars-sanmarco">
+              <span onclick="rateCafe('sanmarco',1)" style="font-size:20px;cursor:pointer;color:#ddd">★</span>
+              <span onclick="rateCafe('sanmarco',2)" style="font-size:20px;cursor:pointer;color:#ddd">★</span>
+              <span onclick="rateCafe('sanmarco',3)" style="font-size:20px;cursor:pointer;color:#ddd">★</span>
+              <span onclick="rateCafe('sanmarco',4)" style="font-size:20px;cursor:pointer;color:#ddd">★</span>
+              <span onclick="rateCafe('sanmarco',5)" style="font-size:20px;cursor:pointer;color:#ddd">★</span>
+            </div>
+            <textarea id="note-sanmarco" placeholder="心得..." rows="2" style="width:100%;border:1px solid #e8e4de;border-radius:6px;padding:6px 8px;font-size:12px;resize:none;outline:none;font-family:inherit"></textarea>
+            <div style="display:flex;gap:6px;margin-top:6px;align-items:center">
+              <button onclick="saveCafe('sanmarco','Caffè San Marco')" style="font-size:11px;padding:4px 12px;border-radius:20px;background:#6b4423;color:white;border:none;cursor:pointer">儲存</button>
+              <span id="saved-sanmarco" style="font-size:11px;color:#0B6B4A;display:none">✅ 已儲存</span>
+            </div>
+            <div id="saved-note-sanmarco" style="margin-top:6px;font-size:11px;color:#4a3728;display:none"></div>
+          </div>
+        </div>
+
+        <div style="border:1px solid #e8e4de;border-radius:10px;overflow:hidden" id="cafe-specchi">
+          <div style="padding:10px 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+                <span style="font-size:13px;font-weight:500;color:#1a1814">Caffè degli Specchi</span>
+                <span style="font-size:10px;background:#fef3e2;color:#9a5c00;padding:1px 6px;border-radius:10px">1839 年創立</span>
+              </div>
+              <div style="font-size:11px;color:#6b6560;line-height:1.6">正對統一廣場（Piazza Unità），露天座位是欣賞廣場與海面最好的位置。</div>
+              <div style="margin-top:5px;display:flex;gap:6px">
+                <a href="https://maps.google.com/?q=Caffe+degli+Specchi+Trieste" target="_blank" style="font-size:10px;color:#6b6560;text-decoration:none;background:#f0ede8;padding:2px 8px;border-radius:10px">地圖 ↗</a>
+              </div>
+            </div>
+            <button onclick="toggleCafeReview('specchi')" style="font-size:11px;padding:5px 10px;border-radius:20px;border:1px solid #e8e4de;background:#fff;cursor:pointer;white-space:nowrap;color:#6b6560">✍️ 記錄心得</button>
+          </div>
+          <div id="review-specchi" style="display:none;padding:10px 12px;border-top:1px solid #f0ede8;background:#fafaf8">
+            <div style="display:flex;gap:4px;margin-bottom:6px" id="stars-specchi">
+              <span onclick="rateCafe('specchi',1)" style="font-size:20px;cursor:pointer;color:#ddd">★</span>
+              <span onclick="rateCafe('specchi',2)" style="font-size:20px;cursor:pointer;color:#ddd">★</span>
+              <span onclick="rateCafe('specchi',3)" style="font-size:20px;cursor:pointer;color:#ddd">★</span>
+              <span onclick="rateCafe('specchi',4)" style="font-size:20px;cursor:pointer;color:#ddd">★</span>
+              <span onclick="rateCafe('specchi',5)" style="font-size:20px;cursor:pointer;color:#ddd">★</span>
+            </div>
+            <textarea id="note-specchi" placeholder="心得..." rows="2" style="width:100%;border:1px solid #e8e4de;border-radius:6px;padding:6px 8px;font-size:12px;resize:none;outline:none;font-family:inherit"></textarea>
+            <div style="display:flex;gap:6px;margin-top:6px;align-items:center">
+              <button onclick="saveCafe('specchi','Caffè degli Specchi')" style="font-size:11px;padding:4px 12px;border-radius:20px;background:#2c1810;color:white;border:none;cursor:pointer">儲存</button>
+              <span id="saved-specchi" style="font-size:11px;color:#0B6B4A;display:none">✅ 已儲存</span>
+            </div>
+            <div id="saved-note-specchi" style="margin-top:6px;font-size:11px;color:#4a3728;display:none"></div>
+          </div>
+        </div>
+
+        <div style="border:1px solid #e8e4de;border-radius:10px;overflow:hidden" id="cafe-tommaseo">
+          <div style="padding:10px 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+                <span style="font-size:13px;font-weight:500;color:#1a1814">Caffè Tommaseo</span>
+                <span style="font-size:10px;background:#f0edf8;color:#5a3a8a;padding:1px 6px;border-radius:10px">特里埃斯特最古老咖啡館</span>
+              </div>
+              <div style="font-size:11px;color:#6b6560;line-height:1.6">1830 年開業，Art Nouveau 鏡面裝潢完整保留，據說是全城最早供應冰淇淋的地方。</div>
+              <div style="margin-top:5px;display:flex;gap:6px">
+                <a href="https://maps.google.com/?q=Caffe+Tommaseo+Trieste" target="_blank" style="font-size:10px;color:#6b6560;text-decoration:none;background:#f0ede8;padding:2px 8px;border-radius:10px">地圖 ↗</a>
+              </div>
+            </div>
+            <button onclick="toggleCafeReview('tommaseo')" style="font-size:11px;padding:5px 10px;border-radius:20px;border:1px solid #e8e4de;background:#fff;cursor:pointer;white-space:nowrap;color:#6b6560">✍️ 記錄心得</button>
+          </div>
+          <div id="review-tommaseo" style="display:none;padding:10px 12px;border-top:1px solid #f0ede8;background:#fafaf8">
+            <div style="display:flex;gap:4px;margin-bottom:6px" id="stars-tommaseo">
+              <span onclick="rateCafe('tommaseo',1)" style="font-size:20px;cursor:pointer;color:#ddd">★</span>
+              <span onclick="rateCafe('tommaseo',2)" style="font-size:20px;cursor:pointer;color:#ddd">★</span>
+              <span onclick="rateCafe('tommaseo',3)" style="font-size:20px;cursor:pointer;color:#ddd">★</span>
+              <span onclick="rateCafe('tommaseo',4)" style="font-size:20px;cursor:pointer;color:#ddd">★</span>
+              <span onclick="rateCafe('tommaseo',5)" style="font-size:20px;cursor:pointer;color:#ddd">★</span>
+            </div>
+            <textarea id="note-tommaseo" placeholder="心得..." rows="2" style="width:100%;border:1px solid #e8e4de;border-radius:6px;padding:6px 8px;font-size:12px;resize:none;outline:none;font-family:inherit"></textarea>
+            <div style="display:flex;gap:6px;margin-top:6px;align-items:center">
+              <button onclick="saveCafe('tommaseo','Caffè Tommaseo')" style="font-size:11px;padding:4px 12px;border-radius:20px;background:#2c1810;color:white;border:none;cursor:pointer">儲存</button>
+              <span id="saved-tommaseo" style="font-size:11px;color:#0B6B4A;display:none">✅ 已儲存</span>
+            </div>
+            <div id="saved-note-tommaseo" style="margin-top:6px;font-size:11px;color:#4a3728;display:none"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var cafeRatings = {};
+
+function toggleCafeReview(id) {
+  var el = document.getElementById('review-' + id);
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function rateCafe(id, val) {
+  cafeRatings[id] = val;
+  var stars = document.getElementById('stars-' + id).children;
+  for (var i = 0; i < 5; i++) {
+    stars[i].style.color = i < val ? '#c0784a' : '#ddd';
+  }
+}
+
+function saveCafe(id, name) {
+  var rating = cafeRatings[id] || 0;
+  var note = document.getElementById('note-' + id).value;
+  var data = { name: name, rating: rating, note: note, time: new Date().toLocaleString('zh-TW') };
+  try { localStorage.setItem('cafe-' + id, JSON.stringify(data)); } catch(e) {}
+  var msg = document.getElementById('saved-' + id);
+  msg.style.display = 'inline';
+  setTimeout(function(){ msg.style.display = 'none'; }, 2000);
+  showCafeSaved(id, data);
+}
+
+function showCafeSaved(id, data) {
+  var el = document.getElementById('saved-note-' + id);
+  if (!el) return;
+  var stars = data.rating ? '★'.repeat(data.rating) + '☆'.repeat(5 - data.rating) : '未評分';
+  el.innerHTML = '<span style="color:#c0784a">' + stars + '</span>' +
+    (data.note ? ' · ' + data.note : '') +
+    '<span style="color:#a09890;font-size:10px"> · ' + data.time + '</span>';
+  el.style.display = 'block';
+}
+
+(function(){
+  var ids = ['sanmarco','specchi','tommaseo'];
+  ids.forEach(function(id) {
+    try {
+      var saved = localStorage.getItem('cafe-' + id);
+      if (saved) {
+        var data = JSON.parse(saved);
+        cafeRatings[id] = data.rating;
+        if (data.rating) {
+          var stars = document.getElementById('stars-' + id);
+          if (stars) {
+            for (var i = 0; i < 5; i++) {
+              stars.children[i].style.color = i < data.rating ? '#c0784a' : '#ddd';
+            }
+          }
+        }
+        if (data.note) {
+          var noteEl = document.getElementById('note-' + id);
+          if (noteEl) noteEl.value = data.note;
+        }
+        showCafeSaved(id, data);
+      }
+    } catch(e) {}
+  });
+})();
+</script>
+
+<footer>行程資料來源：楊馥如．移動講堂報名表單，景點連結為各官方或觀光局網站／Google Maps 定位</footer>
+
+<script>
+const WD = ['日','一','二','三','四','五','六'];
+function getDate(y, m, d, offset) {
+  const dt = new Date(y, m - 1, d);
+  dt.setDate(dt.getDate() + offset);
+  return dt;
+}
+function fmt(d) {
+  return `${d.getMonth() + 1}/${d.getDate()}（${WD[d.getDay()]}）`;
+}
+
+const days = [
+  {
+    n: 1, zh: "抵達義大利，入住弗留利鄉間旅宿", en: "Arrival in Italy → Buttrio, Friuli", country: "義大利", flag: "🇮🇹",
+    spots: [],
+    mapSpots: [
+      { name: "威尼斯馬可波羅機場 VCE", lat: 45.5053, lon: 12.3519 },
+      { name: "🏨 Corte delle Fucine",   lat: 46.0008, lon: 13.3283 },
+    ],
+    meals: { 早: "—", 午: "抵達當地／自理", 晚: "歡迎晚餐（旅宿內享用）" },
+    hotel: "邊境鄉間精品旅宿 Corte delle Fucine ****S Buttrio (Udine)",
+    note: "14:00（預計）於威尼斯馬可波羅機場集合，驅車前往弗留利大區鄉間旅宿，入住、稍事休息後享用歡迎晚餐",
+    flights: [
+      { label: '去程 ①', airline: '阿聯酋航空', no: 'EK367', from: '台北 TPE', to: '杜拜 DXB', dep: '23:50（9/19）', arr: '04:35+1', duration: '約 8h 45m' },
+      { label: '去程 ②', airline: '阿聯酋航空', no: 'EK135', from: '杜拜 DXB', to: '威尼斯 VCE', dep: '09:20+1', arr: '13:25（9/20）', duration: '約 6h 05m' },
+    ]
+  },
+  {
+    n: 2, zh: "馬賽克鑲嵌藝術與聖丹尼爾火腿", en: "San Daniele Ham & Spilimbergo Mosaic", country: "義大利", flag: "🇮🇹",
+    spots: [
+      { n: "★San Daniele「聖丹尼爾」火腿工坊見學與品鑑", type: "star", links: [{ t: "火腿協會官網", u: "https://www.prosciuttosandaniele.it/", o: true }, { t: "📍 Google Maps", u: "https://maps.google.com/?q=San+Daniele+del+Friuli", o: false }] },
+      { n: "★Spilimbergo「史丕林堡」馬賽克專門學校見學", type: "star", links: [{ t: "馬賽克學校官網", u: "https://www.scuolamosaicistifriuli.it/", o: true }, { t: "📍 Google Maps", u: "https://maps.google.com/?q=Spilimbergo", o: false }] },
+    ],
+    mapSpots: [
+      { name: "★San Daniele 火腿工坊", lat: 46.1651, lon: 12.9999 },
+      { name: "★Spilimbergo 馬賽克學校", lat: 46.1136, lon: 12.8918 },
+      { name: "🏨 Corte delle Fucine", lat: 46.0008, lon: 13.3283 },
+    ],
+    meals: { 早: "飯店內用", 午: "火腿工坊輕食", 晚: "弗留利經典料理" },
+    hotel: "邊境鄉間精品旅宿 Corte delle Fucine ****S Buttrio (Udine)",
+    note: "上午驅車前往火腿名城聖丹尼爾，城市散步並見學品鑑風乾生火腿工藝；下午前往馬賽克名城史丕林堡，走訪百年馬賽克專門學校"
+  },
+  {
+    n: 3, zh: "倫巴底古文明與偶戲藝術", en: "Cividale del Friuli: Lombard Heritage", country: "義大利", flag: "🇮🇹",
+    spots: [
+      { n: "★Cividale del Friuli「齊維達」倫巴底古文明藝術走讀", type: "heritage", links: [{ t: "UNESCO 世界遺產", u: "https://whc.unesco.org/en/list/1318/", o: true }, { t: "📍 Google Maps", u: "https://maps.google.com/?q=Cividale+del+Friuli", o: false }] },
+      { n: "★世界偶戲博物館（偶戲職人帶訪）", type: "star", links: [{ t: "📍 Google Maps", u: "https://maps.google.com/?q=Museo+Marionette+Cividale+del+Friuli", o: false }] },
+      { n: "◎邊境酒莊「風土學」品酒導覽", type: "dot", links: [{ t: "📍 Google Maps", u: "https://maps.google.com/?q=cantine+Collio+Friuli", o: false }] },
+    ],
+    mapSpots: [
+      { name: "★Cividale del Friuli", lat: 46.0928, lon: 13.4287 },
+      { name: "★世界偶戲博物館", lat: 46.0928, lon: 13.4287 },
+      { name: "🏨 Corte delle Fucine", lat: 46.0008, lon: 13.3283 },
+    ],
+    meals: { 早: "飯店內用", 午: "倫巴底老菜", 晚: "酒莊葡萄酒品鑑晚餐" },
+    hotel: "邊境鄉間精品旅宿 Corte delle Fucine ****S Buttrio (Udine)",
+    note: "UNESCO 世界遺產小城齊維達，走讀倫巴底人在義大利留下的古文明藝術遺跡，並由偶戲職人帶訪世界偶戲博物館；傍晚於邊境酒莊進行風土品飲"
+  },
+  {
+    n: 4, zh: "邊境古城與有機乳酪", en: "Palmanova Star Fort & Aquileia", country: "義大利", flag: "🇮🇹",
+    spots: [
+      { n: "★Palmanova「九角星」邊境古城走讀", type: "heritage", links: [{ t: "UNESCO 世界遺產", u: "https://whc.unesco.org/en/list/1533/", o: true }, { t: "Wikipedia", u: "https://en.wikipedia.org/wiki/Palmanova", o: false }] },
+      { n: "◎有機乳酪工坊「乳酪風味學」見學", type: "dot", links: [{ t: "📍 Google Maps", u: "https://maps.google.com/?q=caseificio+biologico+Friuli", o: false }] },
+      { n: "★Aquileia「阿奎萊亞」主教堂藝術走讀", type: "heritage", links: [{ t: "UNESCO 世界遺產", u: "https://whc.unesco.org/en/list/825/", o: true }, { t: "📍 Google Maps", u: "https://maps.google.com/?q=Basilica+di+Aquileia", o: false }] },
+    ],
+    mapSpots: [
+      { name: "★Palmanova 九角星古城", lat: 45.9058, lon: 13.3103 },
+      { name: "★Aquileia 主教堂", lat: 45.7686, lon: 13.3717 },
+      { name: "🏨 Corte delle Fucine", lat: 46.0008, lon: 13.3283 },
+    ],
+    meals: { 早: "飯店內用", 午: "乳酪工坊輕食午餐", 晚: "東北義地方風味餐" },
+    hotel: "邊境鄉間精品旅宿 Corte delle Fucine ****S Buttrio (Udine)",
+    note: "上午走讀文藝復興星形要塞古城帕瑪諾瓦，並見學有機乳酪工坊；下午前往羅馬帝國極東古城阿奎萊亞，走讀主教堂內珍貴馬賽克地坪藝術"
+  },
+  {
+    n: 5, zh: "盧比亞納（移動日／長車程）", en: "Ljubljana, Slovenia → Bled", country: "斯洛維尼亞", flag: "🇸🇮",
+    spots: [
+      { n: "◎盧比亞納城市散步", type: "dot", links: [{ t: "Visit Ljubljana", u: "https://www.visitljubljana.com/en/", o: true }, { t: "📍 Google Maps", u: "https://maps.google.com/?q=Ljubljana", o: false }] },
+    ],
+    mapSpots: [
+      { name: "◎盧比亞納舊城", lat: 46.0569, lon: 14.5058 },
+      { name: "🏨 Bled Hotel Park", lat: 46.3683, lon: 14.1146 },
+    ],
+    meals: { 早: "飯店內用", 午: "自由食", 晚: "湖區風味料理" },
+    hotel: "布雷德湖畔綠旅宿 Bled Hotel Park **** Bled (Slovenia)",
+    note: "長車程移動日：驅車前往斯洛維尼亞首都盧比亞納城市散步，午後續往布雷德湖區，入住湖畔旅宿稍事休息"
+  },
+  {
+    n: 6, zh: "拉多夫利察與蜂蜜大解析", en: "Beekeeping & Radovljica Gingerbread", country: "斯洛維尼亞", flag: "🇸🇮",
+    spots: [
+      { n: "★養蜂工坊「蜂蜜大解析」見學", type: "star", links: [{ t: "拉多夫利察蜂業博物館", u: "https://www.muzeji-radovljica.si/en/beekeeping-museum/", o: true }, { t: "📍 Google Maps", u: "https://maps.google.com/?q=beekeeping+workshop+Radovljica", o: false }] },
+      { n: "★Radovljica「拉多夫利察」城市散步", type: "star", links: [{ t: "📍 Google Maps", u: "https://maps.google.com/?q=Radovljica", o: false }] },
+      { n: "★傳統薑餅工坊手作體驗（Lectar）", type: "star", links: [{ t: "Lectar 官網", u: "https://www.lectar.com/en/", o: true }] },
+      { n: "◎斯洛維尼亞傳統農家拜訪", type: "dot", links: [{ t: "📍 Google Maps", u: "https://maps.google.com/?q=traditional+farm+Bled", o: false }] },
+    ],
+    mapSpots: [
+      { name: "★養蜂工坊", lat: 46.3433, lon: 14.1725 },
+      { name: "★Radovljica 古城", lat: 46.3433, lon: 14.1725 },
+      { name: "🏨 Bled Hotel Park", lat: 46.3683, lon: 14.1146 },
+    ],
+    meals: { 早: "飯店內用", 午: "斯洛維尼亞山區料理", 晚: "斯洛維尼亞傳統農家菜" },
+    hotel: "布雷德湖畔綠旅宿 Bled Hotel Park **** Bled (Slovenia)",
+    note: "上午見學養蜂工坊，解析斯洛維尼亞百年養蜂文化；午後漫步中世紀小鎮拉多夫利察，並手作傳統心形薑餅；傍晚拜訪在地傳統農家享用道地晚餐"
+  },
+  {
+    n: 7, zh: "文特高峽谷與布萊德湖", en: "Vintgar Gorge & Lake Bled", country: "斯洛維尼亞", flag: "🇸🇮",
+    spots: [
+      { n: "★文特高峽谷輕健行 Vintgar Gorge", type: "star", links: [{ t: "官網", u: "https://www.bled.si/en/what-to-see-and-do/vintgar-gorge", o: true }, { t: "Wikipedia", u: "https://en.wikipedia.org/wiki/Vintgar_Gorge", o: false }] },
+      { n: "★布萊德城堡 Bled Castle", type: "star", links: [{ t: "官網", u: "https://www.blejski-grad.si/en", o: true }] },
+      { n: "★布萊德湖許願島（聖母升天教堂）", type: "star", links: [{ t: "Bled 官方觀光局", u: "https://www.bled.si/en", o: true }, { t: "Wikipedia", u: "https://en.wikipedia.org/wiki/Lake_Bled", o: false }] },
+    ],
+    mapSpots: [
+      { name: "★文特高峽谷", lat: 46.4067, lon: 14.0783 },
+      { name: "★布萊德城堡", lat: 46.3694, lon: 14.1103 },
+      { name: "★布萊德湖許願島", lat: 46.3639, lon: 14.0911 },
+      { name: "🏨 Bled Hotel Park", lat: 46.3683, lon: 14.1146 },
+    ],
+    meals: { 早: "飯店內用", 午: "城堡午餐", 晚: "布萊德風味料理" },
+    hotel: "布雷德湖畔綠旅宿 Bled Hotel Park **** Bled (Slovenia)",
+    note: "上午河谷自然保育區文特高峽谷輕健行；下午參觀懸崖上的布萊德城堡，午後乘船登上湖中小島，探訪島上聖母升天教堂"
+  },
+  {
+    n: 8, zh: "洞穴堡與望海堡（移動日／長車程）", en: "Predjama Castle → Trieste", country: "斯洛維尼亞→義大利", flag: "🇸🇮",
+    spots: [
+      { n: "★Predjama「普列加馬」洞穴堡", type: "star", links: [{ t: "官網", u: "https://www.postojnska-jama.eu/en/predjama-castle/", o: true }, { t: "Wikipedia", u: "https://en.wikipedia.org/wiki/Predjama_Castle", o: false }] },
+      { n: "★望海堡 Miramare Castle 歷史走讀", type: "star", links: [{ t: "官網", u: "https://miramare.cultura.gov.it/en/", o: true }, { t: "Wikipedia", u: "https://en.wikipedia.org/wiki/Miramare_Castle", o: false }] },
+    ],
+    mapSpots: [
+      { name: "★Predjama 洞穴堡", lat: 45.7914, lon: 14.1319 },
+      { name: "★望海堡 Miramare", lat: 45.7042, lon: 13.7106 },
+      { name: "🏨 Savoia Excelsior Palace", lat: 45.6497, lon: 13.7699 },
+    ],
+    meals: { 早: "飯店內用", 午: "洞穴堡景觀餐廳", 晚: "海岸風味料理" },
+    hotel: "海岸古典風格旅宿 Savoia Excelsior Palace Trieste **** Trieste",
+    note: "長車程移動日：上午參觀嵌於斷崖岩洞中的普列加馬洞穴堡，午後驅車返回義大利，走讀濱海的望海堡歷史（哈布斯堡王室行宮），晚間入住特里埃斯特"
+  },
+  {
+    n: 9, zh: "文化名城與咖啡風味學", en: "Trieste: Literature & Coffee Culture", country: "義大利", flag: "🇮🇹",
+    spots: [
+      { n: "★Trieste「特里埃斯特」文學與咖啡之城走讀", type: "star", links: [{ t: "特里埃斯特觀光局", u: "https://www.discover-trieste.it/en", o: true }, { t: "Wikipedia", u: "https://en.wikipedia.org/wiki/Trieste", o: false }] },
+    ],
+    mapSpots: [
+      { name: "★特里埃斯特舊城 · 統一廣場", lat: 45.6495, lon: 13.7768 },
+      { name: "🏨 Savoia Excelsior Palace", lat: 45.6497, lon: 13.7699 },
+    ],
+    meals: { 早: "飯店內用", 午: "自由食", 晚: "特里埃斯特地方菜" },
+    hotel: "海岸古典風格旅宿 Savoia Excelsior Palace Trieste **** Trieste",
+    note: "有「海上奧地利」別名的特里埃斯特，走讀喬伊斯曾旅居的文學街區與百年咖啡館文化，下午自由時間，晚間享用在地風味晚餐"
+  },
+  {
+    n: 10, zh: "克羅埃西亞海岸風光", en: "Poreč & Rovinj, Croatia", country: "克羅埃西亞", flag: "🇭🇷",
+    spots: [
+      { n: "★Poreč「波雷奇」城市走讀", type: "heritage", links: [{ t: "官方觀光局", u: "https://www.myporec.com/en", o: true }, { t: "UNESCO 世界遺產（歐福拉西烏斯主教座堂建築群）", u: "https://whc.unesco.org/en/list/809/", o: false }] },
+      { n: "★Rovinj「羅維尼」城市走讀", type: "star", links: [{ t: "官方觀光局", u: "https://www.rovinj-tourism.com/en", o: true }, { t: "Wikipedia", u: "https://en.wikipedia.org/wiki/Rovinj", o: false }] },
+    ],
+    mapSpots: [
+      { name: "★波雷奇舊城", lat: 45.2269, lon: 13.5947 },
+      { name: "★羅維尼舊城", lat: 45.0811, lon: 13.6387 },
+    ],
+    meals: { 早: "飯店內用", 午: "船上午餐", 晚: "亞德里亞經典海味" },
+    hotel: "海岸古典風格旅宿 Savoia Excelsior Palace Trieste **** Trieste",
+    note: "驅車前往伊斯特拉半島波雷奇，走讀擁有拜占庭馬賽克的歐福拉西烏斯主教座堂建築群；午後搭船前往色彩繽紛的羅維尼舊城，傍晚返回特里埃斯特"
+  },
+  {
+    n: 11, zh: "斯洛維尼亞海岸線", en: "Piran & Hrastovlje", country: "斯洛維尼亞", flag: "🇸🇮",
+    spots: [
+      { n: "★Piran「皮蘭」城市走讀", type: "star", links: [{ t: "Portorož–Piran 觀光局", u: "https://www.portoroz.si/en/piran", o: true }, { t: "Wikipedia", u: "https://en.wikipedia.org/wiki/Piran", o: false }] },
+      { n: "◎亞德里亞漁場見學", type: "dot", links: [{ t: "📍 Google Maps", u: "https://maps.google.com/?q=Ribogojnica+Fonda+Strunjan", o: false }] },
+      { n: "★Hrastovlje「拉斯托維耶」生命之舞彩繪教堂", type: "heritage", links: [{ t: "Wikipedia", u: "https://en.wikipedia.org/wiki/Hrastovlje", o: false }, { t: "📍 Google Maps", u: "https://maps.google.com/?q=Hrastovlje+Holy+Trinity+Church", o: false }] },
+    ],
+    mapSpots: [
+      { name: "★皮蘭舊城", lat: 45.5286, lon: 13.5686 },
+      { name: "★拉斯托維耶彩繪教堂", lat: 45.5325, lon: 13.9219 },
+      { name: "🏨 Savoia Excelsior Palace", lat: 45.6497, lon: 13.7699 },
+    ],
+    meals: { 早: "飯店內用", 午: "皮蘭地方料理", 晚: "惜別晚宴" },
+    hotel: "海岸古典風格旅宿 Savoia Excelsior Palace Trieste **** Trieste",
+    note: "斯洛維尼亞唯一的海岸線：走讀威尼斯式古城皮蘭，見學亞德里亞海漁場；下午前往拉斯托維耶，探訪繪有中世紀「生命之舞」濕壁畫的聖三一教堂；夜晚享用惜別晚宴"
+  },
+  {
+    n: 12, zh: "搭機日：專車接駁返回威尼斯機場", en: "Departure Day → Venice Airport", country: "返程", flag: "🇮🇹",
+    spots: [],
+    mapSpots: [
+      { name: "🏨 Savoia Excelsior Palace", lat: 45.6497, lon: 13.7699 },
+      { name: "威尼斯馬可波羅機場 VCE", lat: 45.5053, lon: 12.3519 },
+    ],
+    meals: { 早: "飯店內用", 午: "機場自理", 晚: "機上" },
+    hotel: "—",
+    note: "12:00（預計）專車接駁至威尼斯馬可波羅機場，結束 12 天義大利極東移動講堂",
+    flights: [
+      { label: '回程 ①', airline: '阿聯酋航空', no: 'EK136', from: '威尼斯 VCE', to: '杜拜 DXB', dep: '15:35', arr: '23:20', duration: '約 5h 45m' },
+      { label: '回程 ②', airline: '阿聯酋航空', no: 'EK366', from: '杜拜 DXB', to: '台北 TPE', dep: '03:45+1', arr: '16:15+1（10/2）', duration: '約 8h 30m' },
+    ]
+  },
+];
+
+// 各地特產資料（依 Day 套用）
+const shopping = {
+  friuli: [
+    { tag: "food", name: "聖丹尼爾風乾生火腿 Prosciutto di San Daniele 🍖", desc: "DOP 原產地認證，僅用海鹽與空氣熟成 13 個月以上，甜潤不死鹹，真空包裝可帶回台灣" },
+    { tag: "food", name: "Montasio 蒙塔西歐乳酪", desc: "弗留利山區傳統硬質乳酪，DOP 認證，熟成度越久風味越濃" },
+    { tag: "food", name: "弗留利白酒 Ribolla Gialla / Friulano", desc: "Collio 與 Colli Orientali 產區白酒，柑橘礦物調，當地酒莊皆可購買" },
+    { tag: "souvenir", name: "史丕林堡馬賽克小品", desc: "馬賽克學校周邊工坊有小型馬賽克畫作與磁磚紀念品，職人手作獨一無二" },
+  ],
+  slovenia: [
+    { tag: "food", name: "拉多夫利察心形薑餅 Lectar 🍯", desc: "斯洛維尼亞傳統手繪蜂蜜薑餅，糖霜圖案色彩繽紛，適合做紀念禮物" },
+    { tag: "food", name: "在地蜂蜜與蜂花粉製品", desc: "養蜂工坊現場即可購買，Radovljica 蜂業博物館也有專賣店" },
+    { tag: "food", name: "克拉尼香腸 Kranjska klobasa", desc: "受歐盟地理標示保護的傳統煙燻香腸，市集與肉舖皆可找到真空包裝款" },
+    { tag: "food", name: "波堤查捲心蛋糕 Potica", desc: "斯洛維尼亞經典節慶甜點，核桃內餡最經典，超市與烘焙坊都買得到" },
+  ],
+  trieste: [
+    { tag: "food", name: "Illy 咖啡豆", desc: "特里埃斯特發源的世界級咖啡品牌，市區專賣店選擇比機場更齊全" },
+    { tag: "food", name: "Presnitz／Putizza 哈布斯堡甜點", desc: "融合奧地利與義大利風味的捲心甜點，內餡有堅果、葡萄乾與蘭姆酒香，百年烘焙坊皆有販售" },
+  ],
+  croatia: [
+    { tag: "food", name: "伊斯特拉松露 Tartufi d'Istria 🍄", desc: "伊斯特拉半島森林盛產白松露與黑松露，可購買松露醬、松露鹽等易保存加工品" },
+    { tag: "food", name: "馬爾瓦季亞白酒 Malvazija", desc: "伊斯特拉半島招牌白葡萄品種，果香明亮，波雷奇、羅維尼酒莊小店皆有販售" },
+    { tag: "food", name: "伊斯特拉冷壓初榨橄欖油", desc: "多次獲國際評鑑肯定的優質橄欖油產區，深色玻璃瓶裝適合攜帶" },
+  ],
+  piran: [
+    { tag: "food", name: "皮蘭鹽田海鹽 Piranska sol 🧂", desc: "Sečovlje 鹽田手工採收的 Fleur de Sel，礦物風味細緻，罐裝方便攜帶" },
+  ],
+};
+
+const dayShoppingMap = {
+  2: shopping.friuli,
+  3: shopping.friuli,
+  4: shopping.friuli,
+  6: shopping.slovenia,
+  7: shopping.slovenia,
+  9: shopping.trieste,
+  10: shopping.croatia,
+  11: [...shopping.piran, ...shopping.slovenia.slice(0, 1)],
+};
+
+const tagLabels = { food: "🍴 食物", brand: "🛍 品牌", souvenir: "🎁 紀念品" };
+
+// 預測氣溫：依 9 月下旬歷史氣候平均高低溫（°C），僅供行前參考，非即時預報
+const dayTempMap = {
+  1:  [{ city: "威尼斯", high: 24, low: 16, lat: 45.44, lon: 12.33 }],
+  2:  [{ city: "聖丹尼爾／史丕林堡", high: 23, low: 14, lat: 46.16, lon: 13.00 }],
+  3:  [{ city: "齊維達", high: 23, low: 14, lat: 46.09, lon: 13.43 }],
+  4:  [{ city: "帕瑪諾瓦／阿奎萊亞", high: 23, low: 14, lat: 45.85, lon: 13.34 }],
+  5:  [{ city: "盧比亞納", high: 21, low: 11, lat: 46.06, lon: 14.51 }],
+  6:  [{ city: "布萊德", high: 19, low: 9,  lat: 46.37, lon: 14.11 }],
+  7:  [{ city: "布萊德", high: 19, low: 9,  lat: 46.37, lon: 14.11 }],
+  8:  [{ city: "普列加馬／特里埃斯特", high: 22, low: 14, lat: 45.65, lon: 13.78 }],
+  9:  [{ city: "特里埃斯特", high: 22, low: 15, lat: 45.65, lon: 13.78 }],
+  10: [{ city: "波雷奇／羅維尼", high: 23, low: 15, lat: 45.15, lon: 13.62 }],
+  11: [{ city: "皮蘭", high: 22, low: 14, lat: 45.53, lon: 13.57 }],
+  12: [{ city: "威尼斯（返程）", high: 24, low: 16, lat: 45.44, lon: 12.33 }],
+};
+
+// 飯店地圖搜尋連結
+const hotelLinks = {
+  'CORTE DELLE FUCINE': 'https://maps.google.com/?q=Corte+delle+Fucine+Buttrio',
+  'BLED HOTEL PARK': 'https://maps.google.com/?q=Bled+Hotel+Park',
+  'SAVOIA EXCELSIOR PALACE': 'https://maps.google.com/?q=Savoia+Excelsior+Palace+Trieste',
+};
+
+function renderHotel(hotelStr) {
+  if (!hotelStr || hotelStr === '夜宿機上' || hotelStr === '—') {
+    return `<span style="color:var(--muted)">${hotelStr || '—'}</span>`;
+  }
+  let url = null;
+  const upper = hotelStr.toUpperCase();
+  for (const [key, link] of Object.entries(hotelLinks)) {
+    if (upper.includes(key)) { url = link; break; }
+  }
+  if (url) {
+    return `<a href="${url}" target="_blank" style="color:var(--blue);text-decoration:none;font-size:12px;display:inline-flex;align-items:center;gap:3px">${hotelStr}<span style="font-size:10px;opacity:0.7">↗</span></a>`;
+  }
+  return `<span style="font-size:12px">${hotelStr}</span>`;
+}
+
+function spotKeys(name) {
+  const engMatch = name.match(/[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)*/);
+  const eng = engMatch ? engMatch[0].toLowerCase().replace(/\s+/g, '') : null;
+  const cn = name.replace(/^[★◎]/, '').split(/[（\s]/)[0].toLowerCase();
+  return { eng, cn };
+}
+function spotKeysMatch(a, b) {
+  if (a.eng && b.eng && (a.eng.includes(b.eng) || b.eng.includes(a.eng))) return true;
+  if (a.cn && b.cn && (a.cn.startsWith(b.cn) || b.cn.startsWith(a.cn))) return true;
+  return false;
+}
+function findSpotCoord(mapSpots, spotName) {
+  if (!mapSpots) return null;
+  const key = spotKeys(spotName);
+  for (const m of mapSpots) {
+    if (spotKeysMatch(key, spotKeys(m.name))) return m;
+  }
+  return null;
+}
+
+function render() {
+  const app = document.getElementById('app');
+  app.innerHTML = days.map((d, i) => {
+    const date = getDate(2026, 9, 20, d.n - 1);
+    const dateStr = fmt(date);
+
+    let spotHTML = '';
+    if (d.spots && d.spots.length) {
+      const items = d.spots.map(s => {
+        const cls = `spot-tag ${s.type}`;
+        const coord = findSpotCoord(d.mapSpots, s.n);
+        const windyHTML = coord
+          ? `<a href="https://www.windy.com/zh-TW/?temp,${coord.lat},${coord.lon},9" target="_blank" style="margin-left:4px;font-size:11px;color:var(--blue);text-decoration:none;opacity:0.85">🌤 Windy ↗</a>`
+          : '';
+        const linksHTML = (s.links && s.links.length) || windyHTML
+          ? `<div class="link-row">${(s.links || []).map(l =>
+              `<a class="link-btn${l.o ? ' official' : ''}" href="${l.u}" target="_blank">${l.t} ↗</a>`
+            ).join('')}${windyHTML}</div>`
+          : '';
+        return `<div class="spot-item"><span class="${cls}">${s.n}</span>${linksHTML}</div>`;
+      }).join('');
+      const mapDiv = d.mapSpots && d.mapSpots.length
+        ? `<div class="day-map" id="map-day${d.n}"></div>`
+        : '';
+      spotHTML = `<div class="section"><div class="section-label">景點 &amp; 連結</div><div class="spots">${items}</div>${mapDiv}</div>`;
+    }
+
+    const noteHTML = d.note
+      ? `<div class="note">${d.note}</div>`
+      : '';
+
+    const tempItems = dayTempMap[d.n];
+    let tempHTML = '';
+    if (tempItems && tempItems.length) {
+      const items = tempItems.map(t => {
+        const windyUrl = `https://www.windy.com/zh-TW/?temp,${t.lat},${t.lon},9`;
+        return `<div class="meal-item"><span class="meal-label">${t.city}</span>${t.high}°C / ${t.low}°C <a href="${windyUrl}" target="_blank" style="margin-left:4px;font-size:11px;color:var(--blue);text-decoration:none;opacity:0.85">🌤 Windy ↗</a></div>`;
+      }).join('');
+      tempHTML = `<div class="section"><div class="section-label">預測氣溫（歷史平均高溫／低溫）・點 Windy 看即時預報</div><div class="meal-row">${items}</div></div>`;
+    }
+
+    const shopItems = dayShoppingMap[d.n];
+    let shopHTML = '';
+    if (shopItems && shopItems.length) {
+      const items = shopItems.map(s => `
+        <div class="shopping-item">
+          <div class="shopping-name">
+            <span class="shopping-tag tag-${s.tag}">${tagLabels[s.tag]}</span>${s.name}
+          </div>
+          <div class="shopping-desc">${s.desc}</div>
+          ${s.links && s.links.length ? `<div class="link-row">${s.links.map(l => `<a class="link-btn${l.o ? ' official' : ''}" href="${l.u}" target="_blank">${l.t} ↗</a>`).join('')}</div>` : ''}
+        </div>`).join('');
+      shopHTML = `<div class="shopping-section">
+        <div class="shopping-title">🛒 當地特產 &amp; 購物推薦</div>
+        <div class="shopping-grid">${items}</div>
+      </div>`;
+    }
+
+    let flightHTML = '';
+    if (d.flights && d.flights.length) {
+      const rows = d.flights.map(f => `
+        <tr>
+          <td><span class="flight-label">${f.label}</span></td>
+          <td class="flight-no">${f.no}</td>
+          <td style="color:var(--muted);font-size:11px">${f.airline}</td>
+          <td>
+            <span class="flight-time">${f.dep}</span>
+            <div class="flight-city">${f.from}</div>
+          </td>
+          <td class="flight-arrow">→</td>
+          <td>
+            <span class="flight-time">${f.arr}</span>
+            <div class="flight-city">${f.to}</div>
+          </td>
+          <td><span class="flight-dur">⏱ ${f.duration}</span></td>
+        </tr>`).join('');
+      flightHTML = `<div class="flight-section">
+        <div class="flight-header">✈ 班機資訊</div>
+        <table class="flight-table">
+          <thead><tr>
+            <th>區段</th><th>班次</th><th>航空</th>
+            <th>出發</th><th></th><th>抵達</th><th>飛行時間</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+    }
+
+    return `<div class="day-card">
+      <div class="day-header" onclick="tog(${i})">
+        <span class="day-num">Day ${d.n}</span>
+        <span class="day-date">${dateStr}</span>
+        <span class="flag">${d.flag}</span>
+        <div class="day-title-wrap">
+          <div class="day-zh">${d.zh}</div>
+          <div class="day-en">${d.en}</div>
+        </div>
+        <span class="day-country">${d.country}</span>
+        <span class="chevron" id="ch${i}">▶</span>
+      </div>
+      <div class="day-body" id="bd${i}">
+        ${spotHTML}
+        ${tempHTML}
+        ${flightHTML}
+        <div class="section">
+          <div class="section-label">餐食</div>
+          <div class="meal-row">
+            <div class="meal-item"><span class="meal-label">早</span>${d.meals['早']}</div>
+            <div class="meal-item"><span class="meal-label">午</span>${d.meals['午']}</div>
+            <div class="meal-item"><span class="meal-label">晚</span>${d.meals['晚']}</div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-label">住宿</div>
+          <div class="hotel" style="line-height:1.8">${renderHotel(d.hotel)}</div>
+        </div>
+        ${shopHTML}
+        ${noteHTML}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+const _leafletMaps = {};
+
+function initDayMap(dayN) {
+  const d = days.find(x => x.n === dayN);
+  if (!d || !d.mapSpots || _leafletMaps[dayN]) return;
+  const el = document.getElementById('map-day' + dayN);
+  if (!el) return;
+  const map = L.map(el, { scrollWheelZoom: false });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+  const markers = d.mapSpots.map((s, idx) => {
+    const icon = L.divIcon({
+      className: '',
+      html: `<div style="background:#1f4d5c;color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4)">${idx + 1}</div>`,
+      iconSize: [26, 26], iconAnchor: [13, 13]
+    });
+    return L.marker([s.lat, s.lon], { icon }).addTo(map).bindPopup(`<b>${s.name}</b>`);
+  });
+
+  if (d.mapSpots.length > 1) {
+    const routeLatLngs = d.mapSpots.map(s => [s.lat, s.lon]);
+    const routeLine = L.polyline(routeLatLngs, {
+      color: '#1f4d5c', weight: 3, opacity: 0.6, dashArray: '1 8', lineCap: 'round'
+    }).addTo(map);
+    L.polylineDecorator(routeLine, {
+      patterns: [
+        { offset: '8%', repeat: '16%', symbol: L.Symbol.arrowHead({
+          pixelSize: 11, polygon: false,
+          pathOptions: { stroke: true, weight: 2.5, color: '#1f4d5c', opacity: 0.85 }
+        }) }
+      ]
+    }).addTo(map);
+  }
+
+  if (markers.length === 1) {
+    map.setView([markers[0].getLatLng().lat, markers[0].getLatLng().lng], 12);
+  } else if (markers.length > 1) {
+    map.fitBounds(L.featureGroup(markers).getBounds(), { padding: [24, 24] });
+  }
+  _leafletMaps[dayN] = map;
+}
+
+function tog(i) {
+  document.getElementById('bd' + i).classList.toggle('open');
+  document.getElementById('ch' + i).classList.toggle('open');
+  const dayN = days[i].n;
+  setTimeout(() => initDayMap(dayN), 50);
+}
+
+render();
+</script>
+</body>
+</html>
