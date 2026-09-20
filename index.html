@@ -264,6 +264,17 @@
     background: var(--blue-mid);
   }
 
+  .link-btn.custom {
+    background: #fbe7ee;
+    color: #a13e63;
+    border-color: #eab8cb;
+    font-weight: 500;
+  }
+
+  .link-btn.custom:hover {
+    background: #f4c9da;
+  }
+
   .meal-row {
     display: flex;
     gap: 16px;
@@ -1163,7 +1174,7 @@ const days = [
     n: 2, zh: "馬賽克鑲嵌藝術與聖丹尼爾火腿", en: "San Daniele Ham & Spilimbergo Mosaic", country: "義大利", flag: "🇮🇹",
     spots: [
       { n: "★San Daniele「聖丹尼爾」火腿工坊見學與品鑑", type: "star", links: [{ t: "火腿協會官網", u: "https://www.prosciuttosandaniele.it/", o: true }, { t: "📍 Google Maps", u: "https://maps.google.com/?q=San+Daniele+del+Friuli", o: false }] },
-      { n: "★Spilimbergo「史丕林堡」馬賽克專門學校見學", type: "star", links: [{ t: "✨ 深讀：馬賽克名城 Spilimbergo", u: "https://maskywg.github.io/spilimbergo-mosaic/", o: true }, { t: "馬賽克學校官網", u: "https://www.scuolamosaicistifriuli.it/", o: false }, { t: "📍 Google Maps", u: "https://maps.google.com/?q=Spilimbergo", o: false }] },
+      { n: "★Spilimbergo「史丕林堡」馬賽克專門學校見學", type: "star", links: [{ t: "✨ 深讀：馬賽克名城 Spilimbergo", u: "https://maskywg.github.io/spilimbergo-mosaic/", c: true }, { t: "馬賽克學校官網", u: "https://www.scuolamosaicistifriuli.it/", o: true }, { t: "📍 Google Maps", u: "https://maps.google.com/?q=Spilimbergo", o: false }] },
     ],
     mapSpots: [
       { name: "★San Daniele 火腿工坊", lat: 46.1651, lon: 12.9999 },
@@ -1443,7 +1454,7 @@ function render() {
           : '';
         const linksHTML = (s.links && s.links.length) || windyHTML
           ? `<div class="link-row">${(s.links || []).map(l =>
-              `<a class="link-btn${l.o ? ' official' : ''}" href="${l.u}" target="_blank">${l.t} ↗</a>`
+              `<a class="link-btn${l.c ? ' custom' : l.o ? ' official' : ''}" href="${l.u}" target="_blank">${l.t} ↗</a>`
             ).join('')}${windyHTML}</div>`
           : '';
         return `<div class="spot-item"><span class="${cls}">${s.n}</span>${linksHTML}</div>`;
@@ -1477,7 +1488,7 @@ function render() {
             <span class="shopping-tag tag-${s.tag}">${tagLabels[s.tag]}</span>${s.name}
           </div>
           <div class="shopping-desc">${s.desc}</div>
-          ${s.links && s.links.length ? `<div class="link-row">${s.links.map(l => `<a class="link-btn${l.o ? ' official' : ''}" href="${l.u}" target="_blank">${l.t} ↗</a>`).join('')}</div>` : ''}
+          ${s.links && s.links.length ? `<div class="link-row">${s.links.map(l => `<a class="link-btn${l.c ? ' custom' : l.o ? ' official' : ''}" href="${l.u}" target="_blank">${l.t} ↗</a>`).join('')}</div>` : ''}
         </div>`).join('');
       shopHTML = `<div class="shopping-section">
         <div class="shopping-title">🛒 當地特產 &amp; 購物推薦</div>
