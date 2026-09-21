@@ -461,6 +461,93 @@
   <div class="legend-item" style="border-left:1px solid #e2ddd6;padding-left:12px;color:#8a6c2a">🛒 特產推薦：展開每天可見</div>
 </div>
 
+<!-- 行程總覽地圖 -->
+<div style="max-width:800px;margin:1.2rem auto 0;padding:0 1rem">
+  <div style="background:#fff;border:1px solid #e2ddd6;border-radius:12px;overflow:hidden">
+    <div style="background:#1f4d5c;padding:12px 16px">
+      <div style="color:white;font-size:14px;font-weight:500">🗺️ 行程路線總覽</div>
+      <div style="color:rgba(255,255,255,0.68);font-size:11px;margin-top:2px">威尼斯進出，三大住宿據點串起弗留利、斯洛維尼亞、亞德里亞海岸</div>
+    </div>
+    <div id="overview-map" style="height:420px"></div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;padding:12px 16px;font-size:11px;color:var(--muted)">
+      <div style="display:flex;align-items:center;gap:5px"><span style="background:#c0392b;color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">✈</span> 威尼斯（進出）</div>
+      <div style="display:flex;align-items:center;gap:5px"><span style="background:#1f4d5c;color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">4</span> Buttrio／Udine，弗留利鄉間・4 晚</div>
+      <div style="display:flex;align-items:center;gap:5px"><span style="background:#1f4d5c;color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">3</span> Bled，湖區・3 晚</div>
+      <div style="display:flex;align-items:center;gap:5px"><span style="background:#1f4d5c;color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">4</span> Trieste，海岸・4 晚</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function initOverviewMap() {
+  const el = document.getElementById('overview-map');
+  if (!el || el._leafletInited) return;
+  el._leafletInited = true;
+
+  const stays = [
+    { name: "威尼斯 Venice", sub: "Day1 抵達／Day12 搭機離開（不過夜）", lat: 45.4408, lon: 12.3155, nights: null, kind: 'transit' },
+    { name: "Buttrio／Udine", sub: "Corte delle Fucine ****S ・ Day1–5，4 晚", lat: 46.0008, lon: 13.3283, nights: 4, kind: 'stay' },
+    { name: "Bled", sub: "Bled Hotel Park **** ・ Day5–8，3 晚", lat: 46.3683, lon: 14.1146, nights: 3, kind: 'stay' },
+    { name: "Trieste", sub: "Savoia Excelsior Palace **** ・ Day8–12，4 晚", lat: 45.6497, lon: 13.7699, nights: 4, kind: 'stay' },
+  ];
+
+  const map = L.map(el, { scrollWheelZoom: false });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+
+  const markers = stays.map(s => {
+    const isTransit = s.kind === 'transit';
+    const icon = L.divIcon({
+      className: '',
+      html: `<div style="background:${isTransit ? '#c0392b' : '#1f4d5c'};color:#fff;border-radius:50%;width:${isTransit ? 30 : 36}px;height:${isTransit ? 30 : 36}px;display:flex;align-items:center;justify-content:center;font-size:${isTransit ? 13 : 15}px;font-weight:700;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)">${isTransit ? '✈' : s.nights}</div>`,
+      iconSize: [isTransit ? 30 : 36, isTransit ? 30 : 36], iconAnchor: [isTransit ? 15 : 18, isTransit ? 15 : 18]
+    });
+    return L.marker([s.lat, s.lon], { icon }).addTo(map)
+      .bindPopup(`<b>${s.name}</b><br>${s.sub}`);
+  });
+
+  const routeLatLngs = stays.map(s => [s.lat, s.lon]);
+  const routeLine = L.polyline(routeLatLngs, {
+    color: '#1f4d5c', weight: 3, opacity: 0.65, dashArray: '2 9', lineCap: 'round'
+  }).addTo(map);
+  L.polylineDecorator(routeLine, {
+    patterns: [
+      { offset: '6%', repeat: '14%', symbol: L.Symbol.arrowHead({
+        pixelSize: 12, polygon: false,
+        pathOptions: { stroke: true, weight: 2.5, color: '#1f4d5c', opacity: 0.85 }
+      }) }
+    ]
+  }).addTo(map);
+
+  const bounds = L.featureGroup(markers).getBounds();
+  function fit() {
+    map.invalidateSize();
+    map.fitBounds(bounds, { padding: [32, 32] });
+  }
+
+  if (el.offsetWidth > 0) {
+    fit();
+  } else if (window.ResizeObserver) {
+    const ro = new ResizeObserver(() => {
+      if (el.offsetWidth > 0) { fit(); ro.disconnect(); }
+    });
+    ro.observe(el);
+  } else {
+    let tries = 0;
+    const iv = setInterval(() => {
+      tries++;
+      if (el.offsetWidth > 0 || tries > 20) { fit(); clearInterval(iv); }
+    }, 100);
+  }
+}
+if (document.readyState === 'complete') {
+  initOverviewMap();
+} else {
+  window.addEventListener('load', initOverviewMap);
+}
+</script>
+
 <!-- 即時匯率區塊 -->
 <div style="max-width:800px;margin:1.2rem auto 0;padding:0 1rem">
   <div id="rate-card" style="background:#fff;border:1px solid #e2ddd6;border-radius:12px;overflow:hidden">
